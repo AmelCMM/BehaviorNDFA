@@ -23,20 +23,20 @@ jobs:
 
       - name: Build (Linux / macOS)
         if: matrix.os != 'windows-latest'
-        run: g++ -std=c++17 -O2 -Wall -o behavior_hmm behavior_hmm.cpp
+        run: g++ -std=c++17 -O2 -Wall -o BehaviorHMM BehaviorHMM.cpp
 
       - name: Build (Windows)
         if: matrix.os == 'windows-latest'
         shell: cmd
         run: |
           call "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
-          cl /std:c++17 /O2 /W3 behavior_hmm.cpp
+          cl /std:c++17 /O2 /W3 BehaviorHMM.cpp
 
       - name: Run (Linux / macOS)
         if: matrix.os != 'windows-latest'
-        run: ./behavior_hmm
+        run: ./BehaviorHMM
 
       - name: Run (Windows)
         if: matrix.os == 'windows-latest'
         shell: cmd
-        run: behavior_hmm.exe
+        run: BehaviorHMM.exe
