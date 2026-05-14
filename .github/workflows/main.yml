@@ -1,0 +1,42 @@
+name: Build
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+          - os: macos-latest
+          - os: windows-latest
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build (Linux / macOS)
+        if: matrix.os != 'windows-latest'
+        run: g++ -std=c++17 -O2 -Wall -o behavior_hmm behavior_hmm.cpp
+
+      - name: Build (Windows)
+        if: matrix.os == 'windows-latest'
+        shell: cmd
+        run: |
+          call "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
+          cl /std:c++17 /O2 /W3 behavior_hmm.cpp
+
+      - name: Run (Linux / macOS)
+        if: matrix.os != 'windows-latest'
+        run: ./behavior_hmm
+
+      - name: Run (Windows)
+        if: matrix.os == 'windows-latest'
+        shell: cmd
+        run: behavior_hmm.exe
